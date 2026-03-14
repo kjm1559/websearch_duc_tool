@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "websearch_duc_tool"
+version = "0.1.0"
+description = "Web search and summarization tool with DuckDuckGo scraping, web rendering, and AI summarization"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your@email.com"}
+]
+requires-python = ">=3.9"
+keywords = ["web-scraping", "duckduckgo", "playwright", "summarization", "ai", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    # HTTP requests
+    "httpx>=0.26.0",  # Async HTTP client
+    "requests>=2.31.0",  # Sync HTTP client (fallback)
+    
+    # HTML parsing
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",  # Faster HTML parser
+    "urllib3>=2.0.0",
+    
+    # Web rendering
+    "playwright>=1.40.0",  # Headless browser
+    "asyncio",  # Built-in
+    
+    # LLM integration
+    "openai>=1.0.0",
+    "anthropic>=0.20.0",  # Optional: Claude support
+    
+    # Environment variables
+    "python-dotenv>=1.0.0",
+    
+    # Data validation
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/username/websearch_duc_tool"
+Repository = "https://github.com/username/websearch_duc_tool"
+Documentation = "https://github.com/username/websearch_duc_tool#readme"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --tb=short"
