@@ -1,6 +1,10 @@
 """Unit tests for WebRenderer."""
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 import pytest
-from websearch_duc_tool.renderer import WebRenderer
+from src.renderer import WebRenderer
 
 
 class TestWebRenderer:

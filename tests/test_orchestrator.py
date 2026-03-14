@@ -1,7 +1,11 @@
 """Integration tests for WebSearchOrchestrator."""
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
-from websearch_duc_tool.orchestrator import WebSearchOrchestrator
+from src.orchestrator import WebSearchOrchestrator
 
 
 class TestWebSearchOrchestrator:
@@ -30,7 +34,7 @@ class TestWebSearchOrchestrator:
     @pytest.mark.asyncio
     async def test_search_empty_results(self, orchestrator):
         """Test search with no results."""
-        with patch("websearch_duc_tool.orchestrator.DuckDuckGoScraper") as mock_scraper:
+        with patch("src.orchestrator.DuckDuckGoScraper") as mock_scraper:
             mock_instance = AsyncMock()
             mock_instance.__aenter__ = AsyncMock(return_value=mock_instance)
             mock_instance.__aexit__ = AsyncMock(return_value=False)
@@ -63,9 +67,9 @@ class TestWebSearchOrchestrator:
         mock_summarizer.__aexit__ = AsyncMock(return_value=False)
         mock_summarizer.summarize = AsyncMock(return_value={"summary": "test", "sources": [], "confidence": "high"})
 
-        with patch("websearch_duc_tool.orchestrator.DuckDuckGoScraper", return_value=mock_scraper):
-            with patch("websearch_duc_tool.orchestrator.WebRenderer", return_value=mock_renderer):
-                with patch("websearch_duc_tool.orchestrator.Summarizer", return_value=mock_summarizer):
+        with patch("src.orchestrator.DuckDuckGoScraper", return_value=mock_scraper):
+            with patch("src.orchestrator.WebRenderer", return_value=mock_renderer):
+                with patch("src.orchestrator.Summarizer", return_value=mock_summarizer):
                     result = await orchestrator.search("test query")
                     assert "summary" in result
                     assert "sources" in result
@@ -79,7 +83,7 @@ class TestWebSearchOrchestrator:
         mock_scraper.__aexit__ = AsyncMock(return_value=False)
         mock_scraper.search = AsyncMock(return_value=[])
 
-        with patch("websearch_duc_tool.orchestrator.DuckDuckGoScraper", return_value=mock_scraper):
+        with patch("src.orchestrator.DuckDuckGoScraper", return_value=mock_scraper):
             await orchestrator.search("test", max_results=5)
             assert True
 

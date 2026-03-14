@@ -7,7 +7,7 @@ name = "websearch_duc_tool"
 version = "0.1.0"
 description = "Web search and summarization tool with DuckDuckGo scraping, web rendering, and AI summarization"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Apache-2.0"}
 authors = [
     {name = "Your Name", email = "your@email.com"}
 ]
@@ -16,7 +16,7 @@ keywords = ["web-scraping", "duckduckgo", "playwright", "summarization", "ai", "
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -64,7 +64,8 @@ Repository = "https://github.com/username/websearch_duc_tool"
 Documentation = "https://github.com/username/websearch_duc_tool#readme"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["."]
+include = ["src*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,7 +1,11 @@
 """Unit tests for DuckDuckGoScraper."""
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 import pytest
 import asyncio
-from websearch_duc_tool.duckduckgo_scraper import DuckDuckGoScraper
+from src.duckduckgo_scraper import DuckDuckGoScraper
 
 
 class TestDuckDuckGoScraper:

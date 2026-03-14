@@ -1,7 +1,11 @@
 """Unit tests for Summarizer."""
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 import pytest
 from unittest.mock import AsyncMock, patch
-from websearch_duc_tool.summarizer import Summarizer
+from src.summarizer import Summarizer
 
 
 class TestSummarizer:
