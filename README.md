@@ -99,10 +99,11 @@ cp .env.example .env
 from websearch_duc_tool import WebSearchAgent
 
 # Initialize the agent
-agent = WebSearchAgent(
-    llm_provider="openai",
-    api_key="your-api-key"
-)
+      agent = WebSearchAgent(
+          llm_provider="openai",
+          api_key="your-api-key"
+          # llm_base_url="https://custom-endpoint.com"  # Optional: Custom LLM endpoint
+      )
 
 # Search and summarize
 result = agent.search("latest Python async patterns 2026")
@@ -116,8 +117,26 @@ print(f"Sources: {result['sources']}")
 ```python
 from websearch_duc_tool import WebSearchTool
 
-# Register as a tool for AI agents
-tool = WebSearchTool(agent_framework="crewai")
+      # With custom base URLs
+      from src.tools import WebSearchTool
+
+      # Default usage
+      tool = WebSearchTool()
+
+      # With custom orchestrator
+      from src.orchestrator import WebSearchOrchestrator
+
+      orchestrator = WebSearchOrchestrator(
+          llm_base_url="https://custom-llm.com",
+          search_base_url="https://custom-ddg.com/"
+      )
+      tool = WebSearchTool(orchestrator=orchestrator)
+
+      class WebResearcher:
+          tools = [tool]
+          
+          def research(self, query):
+              return tool.search(query)
 
 class WebResearcher:
     tools = [tool]
@@ -153,11 +172,13 @@ websearch_duc_tool/
 ### Environment Variables (.env)
 
 ```ini
-# LLM Provider
+# LLM Provider Configuration
 LLM_PROVIDER=openai
 OPENAI_API_KEY=your_key_here
+OPENAI_BASE_URL=  # Optional: Custom OpenAI endpoint (e.g., for proxies)
 
-# Search Config
+# Search Configuration
+DUCKDUCKGO_BASE_URL=https://html.duckduckgo.com/html/  # Optional: Custom search endpoint
 MAX_SEARCH_RESULTS=10
 SUMMARIZE_TOP_N=3
 
@@ -192,7 +213,7 @@ Following [AGENTS.md](AGENTS.md) guidelines:
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE)
+Apache 2.0 License - see [LICENSE](LICENSE)
 
 ---
 

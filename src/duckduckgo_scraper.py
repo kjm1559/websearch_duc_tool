@@ -2,17 +2,26 @@ from urllib.parse import urlparse, parse_qs, unquote
 import httpx
 from bs4 import BeautifulSoup
 import re
-from typing import List, Dict
+from typing import List, Dict, Optional
 import asyncio
+import os
 
 
 class DuckDuckGoScraper:
     """DuckDuckGo HTML scraper with async HTTP client."""
 
-    BASE_URL = "https://html.duckduckgo.com/html/"
+    DEFAULT_BASE_URL = "https://html.duckduckgo.com/html/"
 
-    def __init__(self, timeout: float = 15.0):
+    def __init__(
+        self,
+        timeout: float = 15.0,
+        base_url: Optional[str] = None
+    ):
         self.timeout = timeout
+        self.base_url = base_url or os.getenv(
+            "DUCKDUCKGO_BASE_URL",
+            self.DEFAULT_BASE_URL
+        )
         self.session = None
 
     async def __aenter__(self):
@@ -61,7 +70,7 @@ class DuckDuckGoScraper:
         params = {"q": query}
 
         try:
-            response = await self.session.get(self.BASE_URL, params=params)
+            response = await self.session.get(self.base_url, params=params)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.text, "lxml")

@@ -11,16 +11,24 @@ class Summarizer:
         self,
         provider: str = "openai",
         api_key: Optional[str] = None,
-        model: str = "gpt-4o-mini"
+        model: str = "gpt-4o-mini",
+        base_url: Optional[str] = None
     ):
         self.provider = provider
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "")
         self.model = model
+        self.base_url = base_url or os.getenv("OPENAI_BASE_URL", "")
         self.client = None
 
     async def __aenter__(self):
         if self.provider == "openai":
-            self.client = AsyncOpenAI(api_key=self.api_key)
+            if self.base_url:
+                self.client = AsyncOpenAI(
+                    api_key=self.api_key,
+                    base_url=self.base_url
+                )
+            else:
+                self.client = AsyncOpenAI(api_key=self.api_key)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

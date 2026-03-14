@@ -12,12 +12,16 @@ class WebSearchOrchestrator:
         self,
         llm_provider: str = "openai",
         api_key: Optional[str] = None,
+        llm_base_url: Optional[str] = None,
+        search_base_url: Optional[str] = None,
         max_search_results: int = 10,
         summarize_top_n: int = 3,
         request_timeout: float = 15.0
     ):
         self.llm_provider = llm_provider
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "")
+        self.llm_base_url = llm_base_url or os.getenv("OPENAI_BASE_URL", "")
+        self.search_base_url = search_base_url or os.getenv("DUCKDUCKGO_BASE_URL", "")
         self.max_search_results = max_search_results
         self.summarize_top_n = summarize_top_n
         self.request_timeout = request_timeout
@@ -31,7 +35,10 @@ class WebSearchOrchestrator:
         max_results = max_results or self.max_search_results
 
         # Stage 1: DuckDuckGo search
-        async with DuckDuckGoScraper(timeout=self.request_timeout) as scraper:
+        scraper_kwargs = {"timeout": self.request_timeout}
+        if self.search_base_url:
+            scraper_kwargs["base_url"] = self.search_base_url
+        async with DuckDuckGoScraper(**scraper_kwargs) as scraper:
             search_results = await scraper.search(query, max_results=max_results)
 
         if not search_results:
@@ -49,10 +56,13 @@ class WebSearchOrchestrator:
             extracted_contents = await renderer.batch_extract(urls)
 
         # Stage 3: Summarize with LLM
-        async with Summarizer(
-            provider=self.llm_provider,
-            api_key=self.api_key
-        ) as summarizer:
+        summarizer_kwargs = {
+            "provider": self.llm_provider,
+            "api_key": self.api_key
+        }
+        if self.llm_base_url:
+            summarizer_kwargs["base_url"] = self.llm_base_url
+        async with Summarizer(**summarizer_kwargs) as summarizer:
             result = await summarizer.summarize(
                 query=query,
                 search_results=extracted_contents
