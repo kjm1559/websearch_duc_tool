@@ -11,12 +11,12 @@ class Summarizer:
         self,
         provider: str = "openai",
         api_key: Optional[str] = None,
-        model: str = "gpt-4o-mini",
+        model: Optional[str] = None,
         base_url: Optional[str] = None
     ):
         self.provider = provider
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "")
-        self.model = model
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         self.base_url = base_url or os.getenv("OPENAI_BASE_URL", "")
         self.client = None
 

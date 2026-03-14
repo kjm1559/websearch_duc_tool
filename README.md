@@ -175,6 +175,7 @@ websearch_duc_tool/
 # LLM Provider Configuration
 LLM_PROVIDER=openai
 OPENAI_API_KEY=your_key_here
+OPENAI_MODEL=gpt-4o-mini  # Optional: Custom model (default: gpt-4o-mini)
 OPENAI_BASE_URL=  # Optional: Custom OpenAI endpoint (e.g., for proxies)
 
 # Search Configuration

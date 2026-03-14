@@ -12,6 +12,7 @@ class WebSearchOrchestrator:
         self,
         llm_provider: str = "openai",
         api_key: Optional[str] = None,
+        llm_model: Optional[str] = None,
         llm_base_url: Optional[str] = None,
         search_base_url: Optional[str] = None,
         max_search_results: int = 10,
@@ -20,6 +21,7 @@ class WebSearchOrchestrator:
     ):
         self.llm_provider = llm_provider
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "")
+        self.llm_model = llm_model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         self.llm_base_url = llm_base_url or os.getenv("OPENAI_BASE_URL", "")
         self.search_base_url = search_base_url or os.getenv("DUCKDUCKGO_BASE_URL", "")
         self.max_search_results = max_search_results
@@ -58,7 +60,8 @@ class WebSearchOrchestrator:
         # Stage 3: Summarize with LLM
         summarizer_kwargs = {
             "provider": self.llm_provider,
-            "api_key": self.api_key
+            "api_key": self.api_key,
+            "model": self.llm_model
         }
         if self.llm_base_url:
             summarizer_kwargs["base_url"] = self.llm_base_url
