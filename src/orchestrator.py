@@ -17,7 +17,7 @@ class WebSearchOrchestrator:
         search_base_url: Optional[str] = None,
         max_search_results: int = 10,
         summarize_top_n: int = 3,
-        request_timeout: float = 15.0
+        request_timeout: float = 60.0
     ):
         self.llm_provider = llm_provider
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "")

@@ -107,7 +107,12 @@ Citations:
                     temperature=0.3
                 )
 
-                summary_text = response.choices[0].message.content
+                summary_text = response.choices[0].message.content or ""
+                reasoning = response.choices[0].message.reasoning or ""
+                
+                # For Ollama/qwen3.5: reasoning contains the actual response
+                if reasoning and not summary_text:
+                    summary_text = reasoning
 
                 return {
                     "summary": summary_text,

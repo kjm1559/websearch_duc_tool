@@ -48,7 +48,7 @@ class WebRenderer:
             if page is None:
                 page = await self.context.new_page()
 
-            await page.goto(url, timeout=self.timeout * 1000, wait_until="networkidle")
+            await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
             await asyncio.sleep(1)  # Wait for dynamic content
 
             html = await page.content()
@@ -59,7 +59,7 @@ class WebRenderer:
                 tag.decompose()
 
             # Extract main content
-            main_content = soup.find("main") or soup.find("article") or soup.find("body")
+            main_content = soup.find("article") or soup.find("main") or soup.find("body")
             if not main_content:
                 main_content = soup
 
